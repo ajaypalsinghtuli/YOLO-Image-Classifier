@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOLO11 Vision | Image Classifier</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- Dynamic Background Accent Lights -->
+    <div class="bg-glow spot-1"></div>
+    <div class="bg-glow spot-2"></div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon"><i class="fa-solid fa-brain"></i></div>
+                <span>YOLO11<small>Classifier</small></span>
+            </div>
+            <div class="nav-badges">
+                <span class="badge badge-tech"><i class="fa-solid fa-bolt"></i> YOLO11-cls</span>
+                <span class="badge badge-status"><span class="dot"></span> Engine Ready</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="app-container">
+
+        <!-- Hero Section -->
+        <header class="hero">
+            <h1>Real-Time AI Image Classification</h1>
+            <p>Upload any image to run high-confidence inference powered by the <strong>Ultralytics YOLO11</strong> architecture.</p>
+        </header>
+
+        <!-- Main Grid Layout -->
+        <div class="dashboard-grid">
+
+            <!-- Left Panel: Input & Controls -->
+            <section class="panel upload-panel">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="drop-zone" id="dropArea">
+                        <input type="file" id="imageInput" name="image" accept="image/*" hidden>
+                        
+                        <!-- Default Upload UI -->
+                        <div class="drop-content" id="dropContent">
+                            <div class="icon-wrapper">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                            </div>
+                            <h3>Drag & drop your image here</h3>
+                            <p>Supports JPG, PNG, WEBP (Max 10MB)</p>
+                            <span class="browse-btn">Browse File</span>
+                        </div>
+
+                        <!-- Loaded File State -->
+                        <div class="file-info-overlay hidden" id="fileInfoOverlay">
+                            <i class="fa-regular fa-file-image"></i>
+                            <div class="file-details">
+                                <span id="fileName">image.jpg</span>
+                                <small id="fileSize">0 KB</small>
+                            </div>
+                            <button type="button" class="btn-clear" id="clearFileBtn" title="Remove image">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
+                            <i class="fa-solid fa-microchip"></i> Run Inference
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="resetBtn">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Right Panel: Image Display & Predictions -->
+            <section class="panel results-panel">
+                
+                <!-- Display Tab / Controls -->
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-chart-simple"></i> Inference Results</h2>
+                    <div class="metrics-badge hidden" id="speedBadge">
+                        <i class="fa-solid fa-stopwatch"></i> <span id="inferenceTime">--</span> ms
+                    </div>
+                </div>
+
+                <div class="results-layout">
+                    <!-- Image Preview Card -->
+                    <div class="image-preview-card">
+                        <div class="image-wrapper">
+                            <img id="previewImage" src="" alt="Preview placeholder" class="hidden">
+                            <div class="placeholder-state" id="imgPlaceholder">
+                                <i class="fa-regular fa-image"></i>
+                                <p>No image selected</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Predictions Output Card -->
+                    <div class="prediction-card">
+                        
+                        <!-- Primary Winner Banner -->
+                        <div class="primary-result">
+                            <span class="label">Top Prediction</span>
+                            <h3 id="topClass">--</h3>
+                            <div class="confidence-bar-wrapper">
+                                <div class="confidence-bar" id="topConfidenceBar" style="width: 0%;"></div>
+                            </div>
+                            <div class="confidence-text">
+                                <span>Confidence</span>
+                                <strong id="topConfidence">0%</strong>
+                            </div>
+                        </div>
+
+                        <!-- Top-K Predictions Breakdown -->
+                        <div class="top-k-section">
+                            <h4>Class Probabilities</h4>
+                            <div class="probability-list" id="probabilityList">
+                                <div class="empty-list-msg">Run classification to view probability distribution.</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+    <!-- Global Loading Overlay -->
+    <div class="loading-overlay hidden" id="loading">
+        <div class="spinner-box">
+            <div class="pulse-ring"></div>
+            <div class="spinner"></div>
+        </div>
+        <h3>Executing Neural Network...</h3>
+        <p>Extracting feature maps & computing class scores</p>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

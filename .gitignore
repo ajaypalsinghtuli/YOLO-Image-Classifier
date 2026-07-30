@@ -1,0 +1,11 @@
+# Ignore command file
+command.txt
+
+# Ignore Python cache
+__pycache__/
+
+# Ignore all PyTorch model files in models folder
+models/*.pt
+
+# Ignore everything inside uploads
+static/uploads/*
