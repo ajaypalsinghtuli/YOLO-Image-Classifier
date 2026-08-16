@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOLO11 Vision Studio | AI Classifier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2.0">
+</head>
+<body>
+    <div class="glow-bg"></div>
+
+    <div class="app-layout">
+        <!-- Top Navigation / Header -->
+        <header class="app-header">
+            <div class="logo-area">
+                <div class="logo-icon">⚡</div>
+                <div>
+                    <h1 class="brand-title">YOLO11 <span>Vision Studio</span></h1>
+                    <p class="brand-tagline">Real-time SOTA Image Classification Dashboard</p>
+                </div>
+            </div>
+            <div class="header-badges">
+                <a href="{{ dataset_info.dataset_url }}" target="_blank" class="chip">
+                    <span class="dot"></span> {{ dataset_info.name }}
+                </a>
+                <a href="{{ dataset_info.docs_url }}" target="_blank" class="chip chip-accent">
+                    Docs & Benchmarks &nearr;
+                </a>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="dashboard-grid">
+            <!-- Left Side: Controls & Upload Card -->
+            <section class="glass-card">
+                <div class="card-header">
+                    <div class="card-number">01</div>
+                    <div>
+                        <h2>Configuration & Upload</h2>
+                        <p class="subtitle">Choose model size and provide an input image</p>
+                    </div>
+                </div>
+
+                <form id="upload-form">
+                    <!-- Model Variant Selector -->
+                    <div class="form-group">
+                        <label for="model-select">Model Architecture</label>
+                        <div class="select-container">
+                            <select id="model-select" name="model">
+                                {% for key, val in models.items() %}
+                                    <option value="{{ key }}">{{ val.name }} &bull; {{ val.description }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="button" id="view-classes-btn" class="btn-text">
+                            <span>🔍</span> Inspect Model Classes (1,000)
+                        </button>
+                    </div>
+
+                    <!-- Drag & Drop Upload Zone -->
+                    <div class="form-group">
+                        <label>Input Image</label>
+                        <div class="drop-zone" id="drop-zone">
+                            <input type="file" id="file-input" name="file" accept="image/png, image/jpeg, image/jpg, image/webp" required>
+                            <div class="drop-zone-content">
+                                <div class="icon-circle">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="17 8 12 3 7 8"></polyline>
+                                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                                    </svg>
+                                </div>
+                                <p id="file-name-display" class="drop-title">Drag & drop or <span class="highlight">browse</span></p>
+                                <span class="drop-hint">PNG, JPG, WEBP up to 20 MB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="submit-btn" class="btn-gradient">
+                        <span class="btn-text-content">Run YOLO11 Inference</span>
+                    </button>
+                </form>
+
+                <div id="error-box" class="alert-box" style="display: none;"></div>
+            </section>
+
+            <!-- Right Side: Realtime Predictions Dashboard -->
+            <section class="glass-card">
+                <div class="card-header">
+                    <div class="card-number">02</div>
+                    <div>
+                        <h2>Inference Engine Output</h2>
+                        <p class="subtitle">Top 5 classification probabilities and confidence</p>
+                    </div>
+                </div>
+
+                <!-- Empty Initial State -->
+                <div id="placeholder-state" class="state-container">
+                    <div class="empty-art">🖼️</div>
+                    <h3>No inference data yet</h3>
+                    <p>Upload an image and run classification to view probability scores.</p>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading-state" class="state-container" style="display: none;">
+                    <div class="modern-spinner"></div>
+                    <h3>Running Neural Network</h3>
+                    <p>Processing image tensor through YOLO11...</p>
+                </div>
+
+                <!-- Results Output -->
+                <div id="results-content" style="display: none;">
+                    <div class="preview-wrapper">
+                        <img id="image-preview" src="" alt="Classified preview">
+                        <span id="model-badge" class="floating-badge">YOLO11</span>
+                    </div>
+
+                    <div class="prediction-list-header">
+                        <span>Predicted Class</span>
+                        <span>Confidence</span>
+                    </div>
+                    <ul id="top5-list" class="predictions-list"></ul>
+                </div>
+            </section>
+        </main>
+
+        <!-- 1,000 Classes Inspector Modal -->
+        <div id="classes-modal" class="modal-backdrop" style="display: none;">
+            <div class="modal-window">
+                <div class="modal-top">
+                    <div>
+                        <h3 id="modal-title">Model Classes Inspector</h3>
+                        <p class="modal-subtitle">Full list of classes available in current model</p>
+                    </div>
+                    <button type="button" class="btn-close" id="close-modal">&times;</button>
+                </div>
+                <div class="search-bar-container">
+                    <input type="text" id="class-search" placeholder="Search class name or ID...">
+                </div>
+                <div id="modal-body" class="modal-scroll-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}?v=2.0"></script>
+</body>
+</html>
