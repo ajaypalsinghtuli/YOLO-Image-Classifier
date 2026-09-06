@@ -1,0 +1,5 @@
+# Ignore frontend files from language statistics
+static/* linguist-vendored
+templates/* linguist-vendored
+*.css -linguist-detectable
+*.html -linguist-detectable
