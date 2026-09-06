@@ -1,5 +1,8 @@
-# Ignore frontend files from language statistics
-static/* linguist-vendored
-templates/* linguist-vendored
-*.css -linguist-detectable
-*.html -linguist-detectable
+# Exclude all frontend files from language stats
+*.css linguist-detectable=false
+*.html linguist-detectable=false
+*.js linguist-detectable=false
+
+# Mark folders as vendored (third-party/static)
+static/** linguist-vendored
+templates/** linguist-vendored

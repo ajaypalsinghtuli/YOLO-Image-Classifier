@@ -1,4 +1,3 @@
-```markdown
 # ⚡ Real-Time AI Image Classification Web Application
 > **Powered by Ultralytics YOLO11 and Flask**
 
@@ -31,7 +30,6 @@ It supports dynamic multi-scale model selection (Nano through Extra-Large), auto
                    ▼  (JSON Response: Top-5 Predictions & Scores)
    [ Glassmorphism Visual Dashboard ]
 
-```
 
 * **Backend Engine:** Python 3.12, Flask, Werkzeug
 * **Deep Learning Framework:** Ultralytics YOLO11, PyTorch, Pillow
